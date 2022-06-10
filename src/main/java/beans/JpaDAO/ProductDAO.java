@@ -1,17 +1,23 @@
+package beans.JpaDAO;
+import entities.Customer;
+import factory.Factory;
+import entities.Product;
 import org.hibernate.Session;
-
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Component
 public class ProductDAO {
 
-    public Factory factory = Factory.getInstance();
 
+    private Factory factory = Factory.getInstance();
 
-    public List<Product> findAll() {
+    public  List<Product> findAll() {
         List<Product> products;
         try (Session currentSession = factory.getFactory().getCurrentSession()) {
             currentSession.beginTransaction();
@@ -52,7 +58,6 @@ public class ProductDAO {
         return result;
     }
 
-
     public Product findById(int id) {
         Product product;
         try (final Session currentSession = factory.getFactory().getCurrentSession()) {
@@ -74,4 +79,14 @@ public class ProductDAO {
             e.printStackTrace();
         }
     }
+
+    public void showCustomersProducts(int id) {
+        try(Session currentSession = factory.getFactory().getCurrentSession()) {
+            currentSession.beginTransaction();
+            Customer customer = currentSession.get(Customer.class, (long) id);
+            System.out.printf("Покупатель: %s, Корзина: %s",customer.getName(),customer.getProducts());
+            currentSession.getTransaction().commit();
+        }
+    }
+
 }
