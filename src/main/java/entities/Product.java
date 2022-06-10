@@ -1,4 +1,7 @@
+package entities;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +18,15 @@ public class Product {
 
     @Column(name = "price")
     private int price;
+
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "purchase",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private List<Customer> customers;
 
     public Product(Long id, String title, int price) {
         this.id = id;
@@ -54,9 +66,17 @@ public class Product {
         this.price = price;
     }
 
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
     @Override
     public String toString() {
-        return "title:" + title + " " + "price:" + price;
+        return "Продукт:" + title + " " + "Цена:" + price;
     }
 
     @Override
@@ -64,7 +84,7 @@ public class Product {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Product product = (Product) obj;
-        return Objects.equals(title,product.title) && this.price == product.price;
+        return Objects.equals(this.title,product.title) && this.price == product.price;
     }
 
     @Override

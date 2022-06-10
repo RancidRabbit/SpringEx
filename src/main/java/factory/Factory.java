@@ -1,3 +1,5 @@
+package factory;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -8,7 +10,7 @@ public class Factory {
     private static SessionFactory factory;
 
     private Factory() {
-        init();
+           init();
     }
 
     public static Factory getInstance() {
